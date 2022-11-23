@@ -1,8 +1,6 @@
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from users.models import User
 import re
-from rest_framework.fields import CurrentUserDefault
 
 class UserSerializer(serializers.ModelSerializer):
     # 패스워드 확인은 serialization하지 않는다.
@@ -53,7 +51,6 @@ class UserSerializer(serializers.ModelSerializer):
             nickname=nickname,
             password = password
             )
-        user.set_password(password)
         user.save()
         return user
     
@@ -66,20 +63,10 @@ class UserSerializer(serializers.ModelSerializer):
             nickname=nickname,
             password = password
             )
-        user.set_password(password)
         user.save()
         return user
 
 
-
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod 
-    def get_token(cls, user):
-        token = super().get_token(user)
-        token['nickname'] = user.nickname
-        
-        return token
-    
     
 class ProfileEditSerializer(serializers.ModelSerializer):
     class Meta:
